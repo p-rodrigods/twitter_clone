@@ -10,6 +10,8 @@ class IndexController extends Action {
 
 	public function index() {
 
+		$this->view->error = false;
+
 		$this->render('index');
 	}
 

@@ -59,4 +59,33 @@ class Usuario extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    // Metodo para validar login
+
+    public function validarLogin() {
+        $valido = true;
+
+        if (strlen($this->__get('email')) < 3) {
+            $valido = false;
+        }
+
+        if (strlen($this->__get('senha')) < 3) {
+            $valido = false;
+        }
+
+        return $valido;
+    }
+
+    // Metodo para autenticar usuario
+
+    public function auth(){
+        $query = "select id, nome, email from usuarios where email = :email and senha = :senha";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':email', $this->__get('email'));
+        $stmt->bindValue(':senha', $this->__get('senha'));
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        
+    }
+
 }
