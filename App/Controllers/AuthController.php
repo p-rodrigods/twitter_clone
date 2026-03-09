@@ -18,17 +18,23 @@ class AuthController extends Action {
         if($usuario->validarLogin()){
 
             if($usuario->auth()){
-                
+
                 session_start();
 
                 $_SESSION['id'] = $usuario->__get('id');
                 $_SESSION['nome'] = $usuario->__get('nome');
 
-                return header('Location: /timeline');
+                return header ('Location: /timeline');
             } 
         }
 
         return header('Location: /?login=erro');
     }
 
+    public function logout(){
+        session_start();
+        session_destroy();
+
+        return header('Location: /');
+    }
 }
