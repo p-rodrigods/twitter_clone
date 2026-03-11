@@ -31,7 +31,11 @@ class Tweet extends Model {
 
     public function selecionarTodosRegistros(){
 
-        $query = "select id, id_usuario, tweet, data from tweets where  id_usuario = :id_usuario";
+        $query = "SELECT u.nome, t.id, t.tweet, t.data
+                  FROM tweets AS t
+                  INNER JOIN usuarios AS u ON t.id_usuario = u.id
+                  WHERE t.id_usuario = :id_usuario";
+
         $stmt = $this->db->prepare($query);
         $stmt->bindValue('id_usuario', $this->__get('id_usuario'));
         $stmt->execute();
