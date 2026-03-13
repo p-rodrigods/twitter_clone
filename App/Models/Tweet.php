@@ -31,10 +31,10 @@ class Tweet extends Model {
 
     public function selecionarTodosRegistros(){
 
-        $query = "SELECT u.nome, t.id, t.tweet, t.data
+        $query = "SELECT u.nome, t.id, t.tweet, DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as data
                   FROM tweets AS t
                   INNER JOIN usuarios AS u ON t.id_usuario = u.id
-                  WHERE t.id_usuario = :id_usuario";
+                  WHERE t.id_usuario = :id_usuario order by t.data DESC";
 
         $stmt = $this->db->prepare($query);
         $stmt->bindValue('id_usuario', $this->__get('id_usuario'));
