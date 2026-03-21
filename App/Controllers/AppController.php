@@ -103,4 +103,21 @@ class AppController extends Action {
         header('Location: /quem_seguir');
         
     }
+
+    public function remover(){
+
+        if(!$this->validarSession()){
+            return false;
+        }
+
+        $id_tweet = isset($_GET['id']) ? $_GET['id'] : '';
+
+        $tt = Container::getModel('tweet');
+        $tt->__set('id', $id_tweet);
+
+        $tt->removerTweet();
+         
+        return header('Location: /timeline');
+        
+    }
 }

@@ -31,10 +31,12 @@ class Tweet extends Model {
 
     public function selecionarTodosRegistros(){
 
-        $query = "SELECT u.nome, t.id, t.tweet, DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as data
+        $query = "SELECT u.nome, t.id, t.id_usuario, t.tweet, DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as data
                   FROM tweets AS t
                   INNER JOIN usuarios AS u ON t.id_usuario = u.id
-                  WHERE t.id_usuario = :id_usuario order by t.data DESC";
+                  WHERE t.id_usuario = :id_usuario 
+                    or t.id_usuario in (SELECT id_usuario_seguindo FROM usuarios_seguidores WHERE id_usuario = :id_usuario)
+                  order by t.data DESC";
 
         $stmt = $this->db->prepare($query);
         $stmt->bindValue('id_usuario', $this->__get('id_usuario'));
@@ -43,5 +45,15 @@ class Tweet extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function removerTweet(){
+        
+        $query = "DELETE FROM tweets WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id', $this->__get('id'));
+        $stmt->execute();
+
+        return $this;
+
+    }
 
 }
