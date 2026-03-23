@@ -32,6 +32,15 @@ class AppController extends Action {
     
         $this->view->tweets =  $tt->selecionarTodosRegistros();
 
+        $user = Container::getModel('usuario');
+
+        $user->__set('id', $_SESSION['id']);
+
+        $this->view->infoUsuario = $user->getInfoUsuarios();
+        $this->view->totalTweets =  $user->getTotalTweets();
+        $this->view->totalSeguindo = $user->getTotalSeguindo();
+        $this->view->totalSeguidores =  $user->getTotalSeguidores();
+
         $this->render('timeline');
     }
 
@@ -58,10 +67,18 @@ class AppController extends Action {
             return false;
         }
         
+        $user = Container::getModel('usuario');
+
+        $user->__set('id', $_SESSION['id']);
+
+        $this->view->infoUsuario = $user->getInfoUsuarios();
+        $this->view->totalTweets =  $user->getTotalTweets();
+        $this->view->totalSeguindo = $user->getTotalSeguindo();
+        $this->view->totalSeguidores =  $user->getTotalSeguidores();
+
         $pesquisarPor = isset($_GET['pesquisarPor']) ? $_GET['pesquisarPor'] : '';
 
         $usuario = array();
-
 
 
         if($pesquisarPor != ''){
@@ -75,6 +92,7 @@ class AppController extends Action {
 
         $this->view->usuarios = $usuario;
 
+        
         $this->render('quemSeguir');
 
     }

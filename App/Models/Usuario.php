@@ -135,4 +135,58 @@ class Usuario extends Model {
         
         return true;
     }
+
+    // Informações do Usuario
+    public function getInfoUsuarios(){
+        $query = "select nome from usuarios where id= :id_usuario";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->execute();
+        
+        return $stmt->fetch(\PDO::FETCH_ASSOC)['nome'];
+    }
+    
+
+    //Total de Tweets
+    public function getTotalTweets(){
+        $query = "select count(*) as total_tweet from tweets where id_usuario = :id_usuario";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->execute();
+
+        $retorno = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $resultado =  $retorno['total_tweet'] ? $retorno['total_tweet'] : '0';
+         
+        return $resultado;
+    }
+    
+    //Total de usuarios que estamos seguindo
+    public function getTotalSeguindo(){
+        $query = "select count(*) as total_seguindo from usuarios_seguidores where id_usuario = :id_usuario";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->execute();
+        
+        $retorno = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $resultado =  $retorno['total_seguindo'] ? $retorno['total_seguindo'] : '0';
+         
+        return $resultado;
+    }
+    
+
+    //Total de sequidores
+    public function getTotalSeguidores(){
+        $query = "select count(*) as total_seguidores from usuarios_seguidores where id_usuario_seguindo = :id_usuario";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->execute();
+        
+        $retorno = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $resultado =  $retorno['total_seguidores'] ? $retorno['total_seguidores'] : '0';
+         
+        return $resultado;
+    }
 }
